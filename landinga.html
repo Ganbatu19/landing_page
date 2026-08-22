@@ -77,6 +77,58 @@
 
     .nav-links a:hover { color: var(--red); }
 
+    .music-toggle {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      border: 0;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .music-toggle:hover { background: var(--red-soft); }
+
+    .music-equalizer {
+      width: 26px;
+      height: 22px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .music-bar {
+      width: 3px;
+      border-radius: 999px;
+      background: #a0a5aa;
+      transform-origin: bottom;
+      transition: background 0.2s ease;
+    }
+
+    .music-bar:nth-child(1) { height: 8px; }
+    .music-bar:nth-child(2) { height: 12px; }
+    .music-bar:nth-child(3) { height: 9px; }
+    .music-bar:nth-child(4) { height: 14px; }
+
+    .music-toggle.is-playing .music-bar { background: var(--red); }
+    .music-toggle.is-playing .music-bar:nth-child(1) { animation: music-wave 0.72s ease-in-out -0.18s infinite; }
+    .music-toggle.is-playing .music-bar:nth-child(2) { animation: music-wave 0.58s ease-in-out -0.36s infinite; }
+    .music-toggle.is-playing .music-bar:nth-child(3) { animation: music-wave 0.82s ease-in-out -0.1s infinite; }
+    .music-toggle.is-playing .music-bar:nth-child(4) { animation: music-wave 0.66s ease-in-out -0.28s infinite; }
+
+    @keyframes music-wave {
+      0%, 100% { transform: scaleY(0.45); }
+      38% { transform: scaleY(1); }
+      72% { transform: scaleY(0.65); }
+    }
+
+    .background-music { display: none; }
+
     .btn-outline, .btn-primary, .btn-secondary {
       min-height: 48px;
       border-radius: 999px;
@@ -341,7 +393,7 @@
     .footer-logo img {
       display: block;
       width: auto;
-      height: 36px;
+      height: 30px;
       filter: grayscale(1);
       opacity: 0.55;
     }
@@ -373,6 +425,9 @@
       .navbar { min-height: 70px; }
       .logo img { height: 36px; }
       .nav-links a { display: none; }
+      .music-toggle { width: 32px; height: 32px; flex-basis: 32px; }
+      .music-equalizer { width: 22px; height: 18px; gap: 2px; }
+      .music-bar { width: 2px; }
       .hero { padding-top: 35px; }
       .hero h1 { font-size: clamp(30px, 8vw, 40px); }
       .hero-visual { grid-template-columns: minmax(190px, 280px) minmax(200px, 1fr); }
@@ -395,6 +450,7 @@
 
     @media (max-width: 560px) {
       .btn-outline { min-height: 40px; padding: 0 15px; }
+      .nav-links { gap: 8px; }
       .hero { padding-inline: 18px; padding-bottom: 38px; }
       .hero-copy { text-align: left; }
       .hero h1 .headline-dark { white-space: normal; }
@@ -412,6 +468,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: 0.01ms !important; }
+      .music-toggle.is-playing .music-bar { animation: none; }
     }
   </style>
 </head>
@@ -428,9 +485,19 @@
         <button class="btn-outline" id="downloadTopBtn" type="button">
           Апп татах <i class="fas fa-download" aria-hidden="true"></i>
         </button>
+        <button class="music-toggle" id="musicToggle" type="button" aria-label="Хөгжим тоглуулах" aria-pressed="false" title="Хөгжим асаах">
+          <span class="music-equalizer" aria-hidden="true">
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+          </span>
+        </button>
       </div>
     </nav>
   </header>
+
+  <audio class="background-music" id="backgroundMusic" src="assets/mixkit-day-dreamin-with-u-988.mp3" preload="auto"></audio>
 
   <main id="top">
     <section class="hero" id="about">
@@ -562,6 +629,126 @@
       document.getElementById('videoBtn')?.addEventListener('click', () => {
         document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
       });
+
+      const music = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      const preferenceKey = 'saino_music_enabled';
+      const tracks = [
+        'assets/mixkit-day-dreamin-with-u-988.mp3',
+        'assets/mixkit-slow-walk-1009.mp3'
+      ];
+      let currentTrackIndex = 0;
+      let isSwitchingTrack = false;
+      let autoplayRetryArmed = false;
+
+      if (!music || !musicToggle) return;
+
+      music.volume = 0.15;
+
+      const setMusicState = (isPlaying) => {
+        musicToggle.classList.toggle('is-playing', isPlaying);
+        musicToggle.setAttribute('aria-pressed', String(isPlaying));
+        musicToggle.setAttribute('aria-label', isPlaying ? 'Хөгжим зогсоох' : 'Хөгжим тоглуулах');
+        musicToggle.title = isPlaying ? 'Хөгжим унтраах' : 'Хөгжим асаах';
+      };
+
+      const getMusicPreference = () => {
+        try {
+          return sessionStorage.getItem(preferenceKey);
+        } catch (_) {
+          return null;
+        }
+      };
+
+      const saveMusicPreference = (enabled) => {
+        try {
+          sessionStorage.setItem(preferenceKey, String(enabled));
+        } catch (_) {
+          /* Playback still works when storage is unavailable. */
+        }
+      };
+
+      const disarmAutoplayRetry = () => {
+        if (!autoplayRetryArmed) return;
+        autoplayRetryArmed = false;
+        window.removeEventListener('pointerdown', resumeDefaultPlayback, true);
+        window.removeEventListener('keydown', resumeDefaultPlayback, true);
+      };
+
+      const resumeDefaultPlayback = (event) => {
+        if (musicToggle.contains(event.target)) return;
+        disarmAutoplayRetry();
+        if (getMusicPreference() !== 'false' && music.paused) attemptPlayback();
+      };
+
+      const armAutoplayRetry = () => {
+        if (autoplayRetryArmed || getMusicPreference() === 'false') return;
+        autoplayRetryArmed = true;
+        window.addEventListener('pointerdown', resumeDefaultPlayback, true);
+        window.addEventListener('keydown', resumeDefaultPlayback, true);
+      };
+
+      const attemptPlayback = (trackTransition = false, retryAfterInteraction = false) => {
+        if (trackTransition) isSwitchingTrack = true;
+        const playAttempt = music.play();
+        if (playAttempt) {
+          playAttempt
+            .then(() => { isSwitchingTrack = false; })
+            .catch(() => {
+              isSwitchingTrack = false;
+              setMusicState(false);
+              if (retryAfterInteraction) armAutoplayRetry();
+            });
+        } else {
+          isSwitchingTrack = false;
+        }
+      };
+
+      music.addEventListener('play', () => {
+        disarmAutoplayRetry();
+        setMusicState(true);
+      });
+      music.addEventListener('pause', () => {
+        if (!music.ended && !isSwitchingTrack) setMusicState(false);
+      });
+      music.addEventListener('ended', () => {
+        if (getMusicPreference() === 'false') {
+          setMusicState(false);
+          return;
+        }
+
+        isSwitchingTrack = true;
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        music.src = tracks[currentTrackIndex];
+        music.load();
+        music.volume = 0.15;
+        attemptPlayback(true);
+      });
+      music.addEventListener('error', () => {
+        isSwitchingTrack = false;
+        setMusicState(false);
+      });
+
+      musicToggle.addEventListener('click', () => {
+        disarmAutoplayRetry();
+        if (music.paused) {
+          saveMusicPreference(true);
+          attemptPlayback();
+        } else {
+          saveMusicPreference(false);
+          music.pause();
+          setMusicState(false);
+        }
+      });
+
+      setMusicState(false);
+      if (getMusicPreference() !== 'false') {
+        if (document.readyState === 'complete') {
+          attemptPlayback(false, true);
+        } else {
+          window.addEventListener('load', () => attemptPlayback(false, true), { once: true });
+        }
+      }
     })();
   </script>
 </body>
