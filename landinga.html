@@ -375,6 +375,55 @@
     .service-item i,
     .service-item .material-symbols-outlined { color: var(--red); font-size: 19px; }
 
+    .feedback-section {
+      width: min(calc(100% - 40px), 920px);
+      margin: 0 auto 100px;
+      scroll-margin-top: 24px;
+    }
+    .feedback-card {
+      padding: clamp(24px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+    .feedback-heading { margin-bottom: 24px; }
+    .feedback-heading h2 {
+      margin-bottom: 8px;
+      font-size: clamp(26px, 3vw, 36px);
+      line-height: 1.2;
+    }
+    .feedback-heading p { color: var(--muted); font-size: 16px; }
+    .feedback-form { display: grid; gap: 18px; }
+    .feedback-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .feedback-field { display: grid; gap: 7px; }
+    .feedback-field-wide { grid-column: 1 / -1; }
+    .feedback-field label { font-size: 14px; font-weight: 700; }
+    .feedback-field label span { color: var(--muted); font-size: 12px; font-weight: 500; }
+    .feedback-field input,
+    .feedback-field textarea {
+      width: 100%;
+      border: 1px solid #d9dcdf;
+      border-radius: 13px;
+      padding: 12px 14px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feedback-field textarea { min-height: 150px; resize: vertical; }
+    .feedback-field input:focus,
+    .feedback-field textarea:focus {
+      border-color: var(--red);
+      outline: 0;
+      box-shadow: 0 0 0 3px rgba(239, 41, 41, 0.12);
+    }
+    .feedback-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .feedback-actions .btn-primary:disabled { cursor: wait; opacity: 0.65; transform: none; }
+    .feedback-result { min-height: 24px; color: var(--muted); font-size: 14px; }
+    .feedback-result.success { color: #15803d; }
+    .feedback-result.error { color: #b91c1c; }
+
     /* Existing footer structure retained. */
     .footer {
       margin-top: 42px;
@@ -446,6 +495,8 @@
       .service-item + .service-item { border-left: 0; }
       .service-item:nth-child(even) { border-left: 1px solid var(--line); }
       .service-item:nth-child(n + 3) { border-top: 1px solid var(--line); }
+      .feedback-fields { grid-template-columns: 1fr; }
+      .feedback-field-wide { grid-column: auto; }
     }
 
     @media (max-width: 560px) {
@@ -482,6 +533,7 @@
         <a href="#">Бидний тухай</a>
         <a href="#">Онцлог</a>
         <a href="#">Сэтгэгдэл</a>
+        <a href="#feedback">Санал хүсэлт</a>
         <button class="btn-outline" id="downloadTopBtn" type="button">
           Апп татах <i class="fas fa-download" aria-hidden="true"></i>
         </button>
@@ -581,6 +633,35 @@
       <div class="service-item"><i class="far fa-credit-card" aria-hidden="true"></i> Төлбөрийн сонголт</div>
       <div class="service-item"><span class="material-symbols-outlined" aria-hidden="true">robot_2</span> AI бараа сонголт</div>
     </section>
+
+    <section class="feedback-section" id="feedback" aria-labelledby="feedbackTitle">
+      <div class="feedback-card">
+        <div class="feedback-heading">
+          <h2 id="feedbackTitle">Санал хүсэлт</h2>
+          <p>SAINO үйлчилгээтэй холбоотой санал, хүсэлтээ бидэнд илгээнэ үү.</p>
+        </div>
+        <form class="feedback-form" id="feedbackForm" novalidate>
+          <div class="feedback-fields">
+            <div class="feedback-field">
+              <label for="feedbackName">Нэр <span>(заавал биш)</span></label>
+              <input id="feedbackName" name="name" type="text" maxlength="120" autocomplete="name">
+            </div>
+            <div class="feedback-field">
+              <label for="feedbackContact">И-мэйл эсвэл утас <span>(заавал биш)</span></label>
+              <input id="feedbackContact" name="contact" type="text" maxlength="200" autocomplete="email">
+            </div>
+            <div class="feedback-field feedback-field-wide">
+              <label for="feedbackMessage">Санал хүсэлт</label>
+              <textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="Санал хүсэлтээ бичнэ үү..."></textarea>
+            </div>
+          </div>
+          <div class="feedback-actions">
+            <button class="btn-primary" id="feedbackSubmit" type="submit">Илгээх</button>
+            <p class="feedback-result" id="feedbackResult" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer class="footer" id="footer">
@@ -589,7 +670,7 @@
         <div class="footer-logo"><img src="assets/saino-logo.png" alt="SAINO"></div>
         <p>ТАНЫ ХЭРЭГЦЭЭ<br>БИДНИЙ ЗҮТГЭЛ.</p>
         <div class="social">
-          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+          <a href="https://www.facebook.com/SainoPlatform/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
           <a href="#" aria-label="WeChat"><i class="fab fa-weixin" aria-hidden="true"></i></a>
         </div>
@@ -628,6 +709,72 @@
       document.getElementById('downloadHeroBtn')?.addEventListener('click', showDownloadMessage);
       document.getElementById('videoBtn')?.addEventListener('click', () => {
         document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      const feedbackForm = document.getElementById('feedbackForm');
+      const feedbackSubmit = document.getElementById('feedbackSubmit');
+      const feedbackResult = document.getElementById('feedbackResult');
+      const setFeedbackResult = (message, type = '') => {
+        if (!feedbackResult) return;
+        feedbackResult.textContent = message;
+        feedbackResult.className = `feedback-result ${type}`.trim();
+      };
+      feedbackForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!feedbackSubmit || feedbackSubmit.disabled) return;
+
+        const formData = new FormData(feedbackForm);
+        const message = String(formData.get('message') || '').trim();
+        const meaningfulCount = (message.match(/[\p{L}\p{N}]/gu) || []).length;
+        if (meaningfulCount < 5) {
+          setFeedbackResult('Санал хүсэлт хамгийн багадаа 5 утгатай тэмдэгттэй байна.', 'error');
+          return;
+        }
+        if (message.length > 2000) {
+          setFeedbackResult('Санал хүсэлт 2000 тэмдэгтээс хэтрэхгүй байна.', 'error');
+          return;
+        }
+
+        feedbackSubmit.disabled = true;
+        feedbackSubmit.textContent = 'Илгээж байна...';
+        setFeedbackResult('');
+        try {
+          const response = await fetch('https://admin.saino.mn/api/public/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Lang': 'mn' },
+            body: JSON.stringify({
+              name: String(formData.get('name') || '').trim(),
+              contact: String(formData.get('contact') || '').trim(),
+              message,
+            }),
+          });
+          if (!response.ok) {
+            let errorMessage = response.status === 429
+              ? 'Хэт олон удаа оролдлоо. Түр хүлээгээд дахин оролдоно уу.'
+              : 'Санал хүсэлт илгээхэд алдаа гарлаа. Дахин оролдоно уу.';
+            try {
+              const payload = await response.json();
+              if (payload && typeof payload.message === 'string' && payload.message.trim()) {
+                errorMessage = payload.message;
+              }
+            } catch (_) {
+              /* Keep the safe localized fallback for non-JSON errors. */
+            }
+            throw new Error(errorMessage);
+          }
+          feedbackForm.reset();
+          setFeedbackResult('Санал хүсэлтийг амжилттай илгээлээ. Баярлалаа.', 'success');
+        } catch (error) {
+          setFeedbackResult(
+            error instanceof Error && error.message
+              ? error.message
+              : 'Санал хүсэлт илгээхэд алдаа гарлаа. Дахин оролдоно уу.',
+            'error'
+          );
+        } finally {
+          feedbackSubmit.disabled = false;
+          feedbackSubmit.textContent = 'Илгээх';
+        }
       });
 
       const music = document.getElementById('backgroundMusic');
