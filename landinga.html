@@ -31,6 +31,18 @@
       color: var(--ink);
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    input, textarea, select, [contenteditable="true"] {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
     }
 
     button, a { font: inherit; }
@@ -704,6 +716,26 @@
 
   <script>
     (function () {
+      const isEditableTarget = (target) => target instanceof Element && Boolean(
+        target.closest('input, textarea, select, [contenteditable="true"]')
+      );
+
+      document.addEventListener('contextmenu', (event) => {
+        if (!isEditableTarget(event.target)) event.preventDefault();
+      });
+      document.addEventListener('selectstart', (event) => {
+        if (!isEditableTarget(event.target)) event.preventDefault();
+      });
+      document.addEventListener('copy', (event) => {
+        if (!isEditableTarget(event.target)) event.preventDefault();
+      });
+      document.addEventListener('dragstart', (event) => {
+        if (event.target instanceof HTMLImageElement) event.preventDefault();
+      });
+      document.querySelectorAll('img').forEach((image) => {
+        image.draggable = false;
+      });
+
       const showDownloadMessage = () => alert('Апп татах цонх нээгдэнэ');
       document.getElementById('downloadTopBtn')?.addEventListener('click', showDownloadMessage);
       document.getElementById('downloadHeroBtn')?.addEventListener('click', showDownloadMessage);
