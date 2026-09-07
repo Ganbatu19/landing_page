@@ -6,6 +6,7 @@
   <meta name="description" content="SAINO — хэрэглэгчийн хэрэгцээнд нийцсэн бараа, чанарын шалгалт, хямд багц, шуурхай хүргэлт.">
   <title>SAINO — Таны хэрэгцээ, бидний зүтгэл</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&amp;display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=mountain_flag,robot_2">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -212,16 +213,90 @@
       background: var(--red);
     }
 
-    .hero h1 {
-      max-width: 680px;
-      margin-bottom: 22px;
-      font-size: clamp(34px, 3.2vw, 48px);
+    .hero-cozy-title {
+      display: inline-flex;
+      max-width: 100%;
+      margin: 2px 0 26px 8px;
+      flex-direction: column;
+      align-items: center;
+      transform: rotate(-2deg);
+      transform-origin: left center;
+      font-family: "Nunito", Inter, system-ui, sans-serif;
       font-weight: 900;
+      line-height: 0.96;
       letter-spacing: -0.045em;
-      line-height: 1.12;
+      -webkit-user-select: text;
+      user-select: text;
     }
-    .hero h1 span { display: block; color: var(--red); }
-    .hero h1 .headline-dark { color: var(--ink); white-space: nowrap; }
+
+    .hero-title-top {
+      position: relative;
+      z-index: 1;
+      display: block;
+      padding: 8px 18px 10px;
+      color: #15191d;
+      font-size: clamp(38px, 3.45vw, 54px);
+      white-space: nowrap;
+    }
+
+    .hero-title-top::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 1px -13px -2px -11px;
+      border-radius: 30px 38px 25px 34px / 24px 31px 22px 28px;
+      background: #ffd8dc;
+      clip-path: polygon(2% 13%, 96% 2%, 100% 76%, 97% 94%, 4% 100%, 0 27%);
+      transform: rotate(-0.8deg);
+    }
+
+    .hero-title-bottom {
+      display: flex;
+      margin-top: 8px;
+      margin-left: clamp(22px, 5vw, 74px);
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--red);
+      font-size: clamp(34px, 3vw, 47px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .hero-title-rays {
+      position: absolute;
+      z-index: 2;
+      top: -20px;
+      right: -50px;
+      width: 58px;
+      height: 58px;
+      overflow: visible;
+      color: #f7b83b;
+      transform: rotate(5deg);
+      pointer-events: none;
+    }
+
+    .hero-title-rays path,
+    .hero-title-hearts path {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero-title-rays path { stroke-width: 5; }
+
+    .hero-title-hearts {
+      width: 70px;
+      height: 50px;
+      flex: 0 0 auto;
+      overflow: visible;
+      color: var(--red);
+      transform: rotate(8deg) translateY(-1px);
+      pointer-events: none;
+    }
+
+    .hero-title-hearts path { stroke-width: 2.8; }
 
     .hero-description {
       max-width: 620px;
@@ -503,7 +578,7 @@
     }
     .feature-card-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 18px;
     }
     .feature-card {
@@ -708,7 +783,10 @@
       .feedback-layout { grid-template-columns: 1fr; }
       .about-layout { gap: 52px; }
       .feature-intro { grid-template-columns: minmax(0, 1fr) minmax(340px, 0.7fr); }
-      .feature-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .feature-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .feature-card-grid > .feature-card { grid-column: span 2; }
+      .feature-card-grid > .feature-card:nth-last-child(2) { grid-column: 2 / span 2; }
+      .feature-card-grid > .feature-card:last-child { grid-column: 4 / span 2; }
       .feedback-layout { gap: 44px; }
       .feedback-copy { max-width: 720px; }
     }
@@ -721,7 +799,8 @@
       .music-equalizer { width: 22px; height: 18px; gap: 2px; }
       .music-bar { width: 2px; }
       .hero { padding-top: 35px; }
-      .hero h1 { font-size: clamp(30px, 8vw, 40px); }
+      .hero-title-top { font-size: clamp(34px, 7vw, 46px); }
+      .hero-title-bottom { font-size: clamp(32px, 6.4vw, 42px); }
       .hero-visual { grid-template-columns: minmax(190px, 280px) minmax(200px, 1fr); }
       .trust-benefits {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -748,11 +827,38 @@
       .nav-links { gap: 8px; }
       .hero { padding-inline: 18px; padding-bottom: 38px; }
       .hero-copy { text-align: left; }
-      .hero h1 .headline-dark { white-space: normal; }
+      .hero-cozy-title {
+        margin: 2px 0 23px 3px;
+        transform: rotate(-1.6deg);
+      }
+      .hero-title-top {
+        padding: 7px 10px 9px;
+        font-size: clamp(28px, 8.1vw, 38px);
+      }
+      .hero-title-top::before { inset: 1px -8px -2px -7px; }
+      .hero-title-bottom {
+        margin-top: 7px;
+        margin-left: 18px;
+        gap: 7px;
+        font-size: clamp(30px, 8vw, 38px);
+      }
+      .hero-title-rays {
+        top: -14px;
+        right: -27px;
+        width: 40px;
+        height: 42px;
+      }
+      .hero-title-rays path { stroke-width: 4; }
+      .hero-title-hearts { width: 51px; height: 39px; }
+      .hero-title-hearts path { stroke-width: 2.5; }
       .hero-description { line-height: 1.6; }
       .hero-actions { align-items: stretch; }
       .hero-actions button { flex: 1 1 150px; }
       .hero-visual { grid-template-columns: 1fr; gap: 28px; }
+      .feature-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .feature-card-grid > .feature-card,
+      .feature-card-grid > .feature-card:nth-last-child(2) { grid-column: span 2; }
+      .feature-card-grid > .feature-card:last-child { grid-column: 2 / span 2; }
       .phone-frame { width: min(76vw, 300px); }
       .model-flow { width: min(100%, 360px); justify-self: center; }
       .section-inner { width: calc(100% - 32px); padding-block: 64px; }
@@ -762,6 +868,9 @@
       .mini-card-grid,
       .feature-card-grid,
       .initiative-grid { grid-template-columns: 1fr; }
+      .feature-card-grid > .feature-card,
+      .feature-card-grid > .feature-card:nth-last-child(2),
+      .feature-card-grid > .feature-card:last-child { grid-column: auto; }
       .mini-card,
       .feature-card,
       .initiative { min-height: 0; padding: 24px; }
@@ -814,7 +923,23 @@
     <section class="hero" id="about">
       <div class="hero-copy">
         <div class="hero-kicker">SAINO E-COMMERCE</div>
-        <h1><span class="headline-dark">ТАНЫ ХЭРЭГЦЭЭ —</span><span>БИДНИЙ ЗҮТГЭЛ.</span></h1>
+        <h1 class="hero-cozy-title">
+          <span class="hero-title-top">
+            Сайхан сэтгэлийн
+            <svg class="hero-title-rays" viewBox="0 0 58 58" aria-hidden="true" focusable="false">
+              <path d="M12 27 2 25"></path>
+              <path d="M20 13 14 3"></path>
+              <path d="M37 12 43 2"></path>
+            </svg>
+          </span>
+          <span class="hero-title-bottom">
+            <span>үүднээс..</span>
+            <svg class="hero-title-hearts" viewBox="0 0 72 52" aria-hidden="true" focusable="false">
+              <path d="M27 42C11 31 5 24 8 15c2-7 12-8 17-1 5-7 15-5 16 3 2 9-5 17-14 25Z"></path>
+              <path d="M52 19c-7-5-10-9-8-13 1-4 6-4 9 0 2-4 8-3 8 2 1 4-3 8-9 11Z"></path>
+            </svg>
+          </span>
+        </h1>
         <p class="hero-description">
           Бид хэрэглэгчийн хэрэгцээ, сонирхолд нийцсэн бүтээгдэхүүнийг сонгон, чанарыг нь шалгаж, илүү ашигтай багцлан, Улаанбаатар болон орон нутагт хүргэдэг цахим худалдааны платформ юм.
         </p>
@@ -914,7 +1039,7 @@
           <article class="mini-card">
             <span class="card-icon"><i class="fas fa-globe" aria-hidden="true"></i></span>
             <h3>Дэлхийд анхны шинэ модел</h3>
-            <p>Монгол хэрэглэгчийн хэрэгцээнээс эхэлсэн худалдааны шинэ загвар.</p>
+            <p>Монгол хэрэглэгчийн хэрэгцээ, Улаанбаатар хотын өнөөгийн асуудлуудийн шийдлээс эхэлсэн худалдааны шинэ загвар.</p>
           </article>
         </div>
       </div>
@@ -941,6 +1066,11 @@
           </aside>
         </div>
         <div class="feature-card-grid">
+          <article class="feature-card">
+            <span class="card-icon"><i class="fas fa-box-open" aria-hidden="true"></i></span>
+            <h3>Багцлалт</h3>
+            <p>Хэрэгцээт барааг цуглуулан нэг багц болгон хүргэж, хэмнэлт бий болгоно.</p>
+          </article>
           <article class="feature-card">
             <span class="card-icon"><i class="fas fa-truck-fast" aria-hidden="true"></i></span>
             <h3>Хот, хөдөөд хүргэнэ</h3>
