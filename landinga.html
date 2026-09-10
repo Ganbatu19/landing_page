@@ -56,11 +56,23 @@
     }
 
     .site-header {
-      background: rgba(255, 255, 255, 0.94);
+      position: relative;
+      background: transparent;
+    }
+
+    .site-header::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
       border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      pointer-events: none;
     }
 
     .navbar {
+      position: relative;
+      z-index: 2;
       width: min(100%, 1570px);
       min-height: 80px;
       margin: 0 auto;
@@ -180,9 +192,14 @@
     }
     .btn-secondary:hover { border-color: var(--ink); box-shadow: var(--shadow-sm); }
 
-    main { width: 100%; }
+    main {
+      width: 100%;
+      overflow-x: clip;
+      overflow-y: visible;
+    }
 
     .hero {
+      position: relative;
       width: min(100%, 1570px);
       margin: 0 auto;
       padding: 42px clamp(20px, 3.25vw, 52px) 54px;
@@ -191,6 +208,24 @@
       align-items: center;
       justify-content: space-between;
       gap: clamp(36px, 4vw, 72px);
+    }
+
+    .hero-copy,
+    .hero-visual {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-mascot {
+      position: absolute;
+      z-index: 1;
+      top: -28px;
+      right: min(-18px, calc((1534px - 100vw) / 2));
+      width: clamp(190px, calc(100vw - 1180px), 470px);
+      height: auto;
+      display: block;
+      transform: translateX(41%);
+      pointer-events: none;
     }
 
     .hero-copy { min-width: 0; max-width: 690px; }
@@ -368,7 +403,6 @@
 
     .hero-visual {
       min-width: 0;
-      position: relative;
       display: grid;
       grid-template-columns: minmax(230px, 330px) minmax(220px, 1fr);
       align-items: center;
@@ -846,6 +880,14 @@
       .feedback-copy { max-width: 720px; }
     }
 
+    @media (max-width: 1600px) and (min-width: 901px) {
+      .hero-mascot { transform: translateX(51%); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-mascot { display: none; }
+    }
+
     @media (max-width: 760px) {
       .navbar { min-height: 70px; }
       .logo img { height: 36px; }
@@ -977,6 +1019,7 @@
 
   <main id="top">
     <section class="hero" id="about">
+      <img class="hero-mascot" src="assets/saino-mascot.png" alt="" aria-hidden="true">
       <div class="hero-copy">
         <div class="hero-kicker">SAINO E-COMMERCE</div>
         <h1 class="hero-cozy-title">
