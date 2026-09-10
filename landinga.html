@@ -221,7 +221,7 @@
       z-index: 1;
       top: -28px;
       right: min(-18px, calc((1534px - 100vw) / 2));
-      width: clamp(190px, calc(100vw - 1180px), 470px);
+      width: clamp(180px, calc(100vw - 1200px), 430px);
       height: auto;
       display: block;
       transform: translateX(41%);
@@ -885,7 +885,12 @@
     }
 
     @media (max-width: 900px) {
-      .hero-mascot { display: none; }
+      .hero-mascot {
+        z-index: 3;
+        width: 150px;
+        right: -6px;
+        transform: none;
+      }
     }
 
     @media (max-width: 760px) {
@@ -921,7 +926,19 @@
     @media (max-width: 560px) {
       .btn-outline { min-height: 40px; padding: 0 15px; }
       .nav-links { gap: 8px; }
-      .hero { padding-inline: 18px; padding-bottom: 38px; }
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-inline: 18px;
+        padding-bottom: 38px;
+      }
+      .hero-mascot {
+        position: absolute;
+        top: -28px;
+        right: -6px;
+        left: auto;
+        width: 110px;
+        transform: none;
+      }
       .hero-copy { text-align: left; }
       .hero-cozy-title {
         margin: 2px 0 23px 3px;
@@ -982,6 +999,17 @@
       .footer-col:first-child { grid-column: 1 / -1; }
     }
 
+    @media (max-width: 450px) {
+      .hero-mascot {
+        position: relative;
+        top: auto;
+        right: auto;
+        justify-self: end;
+        width: 90px;
+        margin: 0;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: 0.01ms !important; }
@@ -1019,7 +1047,6 @@
 
   <main id="top">
     <section class="hero" id="about">
-      <img class="hero-mascot" src="assets/saino-mascot.png" alt="" aria-hidden="true">
       <div class="hero-copy">
         <div class="hero-kicker">SAINO E-COMMERCE</div>
         <h1 class="hero-cozy-title">
@@ -1070,6 +1097,7 @@
           </article>
         </div>
       </div>
+      <img class="hero-mascot" src="assets/saino-mascot.png" alt="" aria-hidden="true">
 
       <div class="hero-visual" aria-label="SAINO апп болон үйлчилгээний загвар">
         <div class="phone-stage">
