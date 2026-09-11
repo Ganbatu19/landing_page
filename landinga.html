@@ -545,6 +545,24 @@
       background: var(--red-soft);
       font-size: 23px;
     }
+    .review-rating-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+    }
+    .review-rating-icon .fa-comment {
+      position: absolute;
+      inset: 0;
+      font-size: 24px;
+      line-height: 24px;
+    }
+    .review-rating-icon .fa-star {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      color: #fff;
+      font-size: 8px;
+    }
     .mini-card h3,
     .feature-card h3,
     .initiative h3 {
@@ -643,7 +661,7 @@
     }
     .feature-card-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
     .feature-card {
@@ -851,8 +869,6 @@
       .coverage-visual { width: min(100%, 760px); justify-self: center; }
       .feature-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
       .feature-card-grid > .feature-card { grid-column: span 2; }
-      .feature-card-grid > .feature-card:nth-last-child(2) { grid-column: 2 / span 2; }
-      .feature-card-grid > .feature-card:last-child { grid-column: 4 / span 2; }
       .feedback-layout { gap: 44px; }
       .feedback-copy { max-width: 720px; }
     }
@@ -1211,6 +1227,16 @@
             <span class="card-icon"><i class="fas fa-gift" aria-hidden="true"></i></span>
             <h3>Шинэлэг сонголт</h3>
             <p>Өдөр тутмын амьдралыг сонирхолтой болгох шинэ бүтээгдэхүүнүүд.</p>
+          </article>
+          <article class="feature-card">
+            <span class="card-icon" aria-hidden="true">
+              <span class="review-rating-icon">
+                <i class="fas fa-comment"></i>
+                <i class="fas fa-star"></i>
+              </span>
+            </span>
+            <h3>Хэрэглэгчийн эргэх холбоо</h3>
+            <p>Бүтээгдэхүүний бодит зураг, хэрэглэгчийн сэтгэгдэл, үнэлгээг шинэ түвшинд авчирсан.</p>
           </article>
         </div>
       </div>
